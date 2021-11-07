@@ -10,7 +10,7 @@ mkfs.ext3 rootfs.ext3
 mount -t ext3 rootfs.ext3 /mnt/ -o loop
 
 #复制文件到sd卡
-cp -r /home/mike/rootfs/* /mnt/
+cp -r ./rootfs/* /mnt/
 
 #卸载sd卡
 umount /mnt/
