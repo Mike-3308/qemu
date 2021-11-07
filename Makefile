@@ -1,7 +1,9 @@
 uboot = ./uboot
 busybox = ./busybox
 linux = ./linux
-image = ./image/
+image = ./image
+scripts = ./scripts
+rootfs = ./rootfs/
 uboot_img = $(uboot)/u-boot*
 filesystem = $(busybox)/rootfs.ext3
 linux_img = $(linux)/arch/arm/boot/*
@@ -12,16 +14,16 @@ all :
 	@cd $(uboot) && $(MAKE) -j8
 	@cp -rf $(uboot_img) $(image)
 	@cd $(busybox) && $(MAKE) -j8
-#	@cd $(busybox) && $(MAKE) install
-#	@cd $(busybox) && ./rootfs.sh
-#	@cp -rf $(filesystem) $(image)
+	@cd $(busybox) && $(MAKE) install
+	@cd $(busybox) && cp ./_install/* ../rootfs -rf
 	@cd $(linux) && $(MAKE) -j8
 	@cp -rf $(linux_img) $(image)
+	@cp -rf $(scripts)/graphic.sh $(image)
+	@cp -rf $(scripts)/nographic.sh $(image)
+	@cp -rf $(scripts)/uboots.sh $(image)
 
 .PHONY : preconfig
 preconfig :
-#	@export ARCH=arm
-#	@export CROSS_COMPILE=arm-linux-gnueabi-
 	@cd $(uboot) && $(MAKE) vexpress_ca9x4_defconfig
 	@cd $(busybox) && $(MAKE) defconfig
 	@cd $(linux) && $(MAKE) vexpress_defconfig
